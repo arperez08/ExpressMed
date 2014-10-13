@@ -32,8 +32,6 @@ typedef NSUInteger TSPopoverArrowPosition;
     TSPopoverArrowDirection arrowDirection;
     CGRect screenRect;
     int titleLabelheight;
-    CGRect contentViewFrame;
-    CGPoint senderPoint;
 }
 
 @property (strong, nonatomic) UIViewController *contentViewController;

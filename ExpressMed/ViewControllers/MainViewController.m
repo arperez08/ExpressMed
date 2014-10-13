@@ -12,13 +12,14 @@
 #import "PharmaViewController.h"
 #import "PromosViewController.h"
 #import "ReminderViewController.h"
+#import "RESideMenu.h"
 
 @interface MainViewController ()
 
 @end
 
 @implementation MainViewController
-@synthesize btnMenu;
+@synthesize btnMenu,viewPharma;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -45,9 +46,11 @@
 
 
 - (IBAction)btnPharma:(id)sender {
-    PharmaViewController *homeVC = [[PharmaViewController alloc]initWithNibName:@"PharmaViewController" bundle:[NSBundle mainBundle]];
-    [self.navigationController setNavigationBarHidden:YES];
-    [self.navigationController pushViewController:homeVC animated:YES];
+//    PharmaViewController *homeVC = [[PharmaViewController alloc]initWithNibName:@"PharmaViewController" bundle:[NSBundle mainBundle]];
+//    [self.navigationController setNavigationBarHidden:YES];
+//    [self.navigationController pushViewController:homeVC animated:YES];
+    
+    viewPharma.hidden = NO;
 }
 
 - (IBAction)btnReminder:(id)sender {
@@ -72,5 +75,23 @@
     PromosViewController *homeVC = [[PromosViewController alloc]initWithNibName:@"PromosViewController" bundle:[NSBundle mainBundle]];
     [self.navigationController setNavigationBarHidden:YES];
     [self.navigationController pushViewController:homeVC animated:YES];
+}
+
+- (IBAction)btnNewOrder:(id)sender {
+    viewPharma.hidden = YES;
+    PharmaViewController *homeVC = [[PharmaViewController alloc]initWithNibName:@"PharmaViewController" bundle:[NSBundle mainBundle]];
+    [self.navigationController setNavigationBarHidden:YES];
+    [self.navigationController pushViewController:homeVC animated:YES];
+}
+
+- (IBAction)btnRefill:(id)sender {
+    viewPharma.hidden = YES;
+    PharmaViewController *homeVC = [[PharmaViewController alloc]initWithNibName:@"PharmaViewController" bundle:[NSBundle mainBundle]];
+    [self.navigationController setNavigationBarHidden:YES];
+    [self.navigationController pushViewController:homeVC animated:YES];
+}
+
+- (IBAction)btnModal:(id)sender {
+    viewPharma.hidden = YES;
 }
 @end

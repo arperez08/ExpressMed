@@ -94,7 +94,40 @@
     return YES;
 }
 
-- (void) showPopoverWithPoint
+- (void) showPopoverWithTouch:(UIEvent*)senderEvent
+{    
+    UIView *senderView = [[senderEvent.allTouches anyObject] view];
+    CGPoint applicationFramePoint = CGPointMake(screenRect.origin.x,0-screenRect.origin.y);
+    //CGPoint senderLocationInWindowPoint = [[[UIApplication sharedApplication] keyWindow] convertPoint:applicationFramePoint fromView:senderView];
+    UIWindow *appWindow = [[UIApplication sharedApplication] keyWindow];
+    CGPoint senderLocationInWindowPoint = [appWindow.rootViewController.view convertPoint:applicationFramePoint fromView:senderView];
+    CGRect senderFrame = [[[senderEvent.allTouches anyObject] view] frame];
+    senderFrame.origin.x = senderLocationInWindowPoint.x;
+    senderFrame.origin.y = senderLocationInWindowPoint.y;
+    CGPoint senderPoint = [self senderPointFromSenderRect:senderFrame];
+    [self showPopoverWithPoint:senderPoint];
+}
+
+- (void) showPopoverWithCell:(UITableViewCell*)senderCell
+{
+    UIView *senderView = senderCell.superview;
+    CGPoint applicationFramePoint = CGPointMake(screenRect.origin.x,0-screenRect.origin.y);
+    CGPoint senderLocationInWindowPoint = [[[UIApplication sharedApplication] keyWindow] convertPoint:applicationFramePoint fromView:senderView];
+    CGRect senderFrame = senderCell.frame;
+    senderFrame.origin.x = senderLocationInWindowPoint.x;
+    senderFrame.origin.y = senderLocationInWindowPoint.y + senderFrame.origin.y;
+    CGPoint senderPoint = [self senderPointFromSenderRect:senderFrame];
+    [self showPopoverWithPoint:senderPoint];
+}
+
+- (void) showPopoverWithRect:(CGRect)senderRect
+{
+
+    CGPoint senderPoint = [self senderPointFromSenderRect:senderRect];
+    [self showPopoverWithPoint:senderPoint];
+}
+
+- (void) showPopoverWithPoint:(CGPoint)senderPoint
 {
     if(self.titleText){
         titleLabelheight = TITLE_LABEL_HEIGHT;
@@ -104,8 +137,7 @@
     [touchView setDelegate:self];
     
     [self.view addSubview:touchView];
-    //CGRect contentViewFrame = [self contentFrameRect:self.contentView.frame senderPoint:senderPoint];
-    contentViewFrame = [self contentFrameRect:self.contentView.frame];
+    CGRect contentViewFrame = [self contentFrameRect:self.contentView.frame senderPoint:senderPoint];
     
     int backgroundPositionX = 0;
     int backgroundPositionY = 0;
@@ -127,7 +159,8 @@
     }
     contentViewFrame.origin.x = backgroundPositionX+MARGIN;
     contentViewFrame.origin.y = backgroundPositionY+titleLabelheight+MARGIN;
-    
+
+
     self.contentView.frame = contentViewFrame;
     CALayer * contentViewLayer = [self.contentView layer];
     [contentViewLayer setMasksToBounds:YES];
@@ -138,13 +171,13 @@
     popoverView.arrowPosition = self.arrowPosition;
     popoverView.arrowPoint = senderPoint;
     popoverView.alpha = 0;
+    popoverView.frame = [self popoverFrameRect:contentViewFrame senderPoint:senderPoint];
     popoverView.cornerRadius = self.cornerRadius;
     popoverView.baseColor = self.popoverBaseColor;
     popoverView.isGradient = self.popoverGradient;
-    popoverView.frame = [self popoverFrameRect:contentViewFrame];
     [popoverView addSubview:self.contentView];
     [popoverView addSubview:titleLabel];
-    
+
     CALayer* layer = popoverView.layer;
     layer.shadowOffset = CGSizeMake(0, 2);
     layer.shadowColor = [[UIColor blackColor] CGColor];
@@ -154,9 +187,9 @@
     
     UIWindow *appWindow = [[UIApplication sharedApplication] keyWindow];
     //[appWindow addSubview:self.view];
-    
+
     [appWindow.rootViewController.view addSubview:self.view];
-    
+
     
     [UIView animateWithDuration:0.0
                           delay:0.0
@@ -167,38 +200,7 @@
                      completion:^(BOOL finished) {
                      }
      ];
-}
 
-- (void) showPopoverWithTouch:(UIEvent*)senderEvent
-{    
-    UIView *senderView = [[senderEvent.allTouches anyObject] view];
-    CGPoint applicationFramePoint = CGPointMake(screenRect.origin.x,0-screenRect.origin.y);
-    //CGPoint senderLocationInWindowPoint = [[[UIApplication sharedApplication] keyWindow] convertPoint:applicationFramePoint fromView:senderView];
-    UIWindow *appWindow = [[UIApplication sharedApplication] keyWindow];
-    CGPoint senderLocationInWindowPoint = [appWindow.rootViewController.view convertPoint:applicationFramePoint fromView:senderView];
-    CGRect senderFrame = [[[senderEvent.allTouches anyObject] view] frame];
-    senderFrame.origin.x = senderLocationInWindowPoint.x;
-    senderFrame.origin.y = senderLocationInWindowPoint.y;
-    senderPoint = [self senderPointFromSenderRect:senderFrame];
-    [self showPopoverWithPoint];
-}
-
-- (void) showPopoverWithCell:(UITableViewCell*)senderCell
-{
-    UIView *senderView = senderCell.superview;
-    CGPoint applicationFramePoint = CGPointMake(screenRect.origin.x,0-screenRect.origin.y);
-    CGPoint senderLocationInWindowPoint = [[[UIApplication sharedApplication] keyWindow] convertPoint:applicationFramePoint fromView:senderView];
-    CGRect senderFrame = senderCell.frame;
-    senderFrame.origin.x = senderLocationInWindowPoint.x;
-    senderFrame.origin.y = senderLocationInWindowPoint.y + senderFrame.origin.y;
-    senderPoint = [self senderPointFromSenderRect:senderFrame];
-    [self showPopoverWithPoint];
-}
-
-- (void) showPopoverWithRect:(CGRect)senderRect
-{
-    senderPoint = [self senderPointFromSenderRect:senderRect];
-    [self showPopoverWithPoint];
 }
 
 - (void)view:(UIView*)view touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event
@@ -240,7 +242,7 @@
     }
 }
 
-- (CGRect) contentFrameRect:(CGRect)contentFrame
+- (CGRect) contentFrameRect:(CGRect)contentFrame senderPoint:(CGPoint)senderPoint
 {
     CGRect contentFrameRect = contentFrame;
     float screenWidth = screenRect.size.width;
@@ -301,33 +303,36 @@
 }
 
 
-- (CGRect)popoverFrameRect:(CGRect)contentFrame
+- (CGRect)popoverFrameRect:(CGRect)contentFrame senderPoint:(CGPoint)senderPoint
 {
-    CGRect popoverRect = CGRectMake(0.0, 0.0, 0.0, 0.0);
+    CGRect popoverRect;
     float popoverWidth;
     float popoverHeight;
     float popoverX;
     float popoverY;
 
     if(self.arrowPosition == TSPopoverArrowPositionVertical){
+        
         popoverWidth = contentFrame.size.width+MARGIN*2;
         popoverHeight = contentFrame.size.height+titleLabelheight+(ARROW_SIZE+MARGIN*2);
+
         popoverX = senderPoint.x - (popoverWidth/2);
         if(popoverX < OUTER_MARGIN) {
             popoverX = OUTER_MARGIN;
-        }
-        else if((popoverX + popoverWidth)>self.view.frame.size.width) {
+        } else if((popoverX + popoverWidth)>self.view.frame.size.width) {
             popoverX = self.view.frame.size.width - (popoverWidth+OUTER_MARGIN);
         }
+        
         if(arrowDirection == TSPopoverArrowDirectionBottom){
             popoverY = senderPoint.y - popoverHeight - ARROW_MARGIN;
-        }
-        else{
+        }else{
             popoverY = senderPoint.y + ARROW_MARGIN;
         }
+        
         popoverRect = CGRectMake(popoverX, popoverY, popoverWidth, popoverHeight);
-    }
-    else if(self.arrowPosition == TSPopoverArrowPositionHorizontal){
+        
+    }else if(self.arrowPosition == TSPopoverArrowPositionHorizontal){
+        
         popoverWidth = contentFrame.size.width+ARROW_SIZE+MARGIN*2;
         popoverHeight = contentFrame.size.height+titleLabelheight+MARGIN*2;
 
@@ -343,14 +348,19 @@
         }else if((popoverY + popoverHeight)>self.view.frame.size.height){
             popoverY = self.view.frame.size.height - (popoverHeight+OUTER_MARGIN);
         }
+        
         popoverRect = CGRectMake(popoverX, popoverY, popoverWidth, popoverHeight);
+
     }
+
+
     return popoverRect;
+    
 }
 
 - (CGPoint)senderPointFromSenderRect:(CGRect)senderRect
 {
-    //CGPoint senderPoint;
+    CGPoint senderPoint;
     [self checkArrowPosition:senderRect];
     
     if(arrowDirection == TSPopoverArrowDirectionTop){

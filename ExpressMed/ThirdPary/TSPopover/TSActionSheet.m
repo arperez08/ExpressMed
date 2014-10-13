@@ -137,6 +137,8 @@
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         button.frame = CGRectMake(BORDER, buttonY, self.bounds.size.width-BORDER*2, buttonHeight);
         button.titleLabel.font = [UIFont boldSystemFontOfSize:16];
+        //button.titleLabel.minimumFontSize = 6;
+        [button.titleLabel setMinimumScaleFactor:6.0/[UIFont labelFontSize]];
         button.titleLabel.adjustsFontSizeToFitWidth = YES;
         button.titleLabel.textAlignment = NSTextAlignmentCenter;
         button.backgroundColor = [UIColor clearColor];
@@ -198,8 +200,8 @@
 - (void)buttonClicked:(id)sender 
 {
     /* Run the button's block */
-    //int buttonIndex = [sender tag] - 1;
-    [self dismissWithClickedButtonIndex:[sender tag]-1 animated:YES];
+    int buttonIndex = [sender tag] - 1;
+    [self dismissWithClickedButtonIndex:buttonIndex animated:YES];
 }
 
 #pragma mark - UIImage

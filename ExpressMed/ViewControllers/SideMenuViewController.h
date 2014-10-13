@@ -10,10 +10,12 @@
 
 @interface SideMenuViewController : UIViewController
 {
-    
+    IBOutlet UILabel *lblWecome;
+    NSMutableDictionary *userData;
 }
 
 - (IBAction)btnLogout:(id)sender;
+@property (strong, nonatomic) IBOutlet UILabel *lblWecome;
 
 
 @end

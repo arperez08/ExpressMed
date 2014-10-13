@@ -13,10 +13,19 @@
 @end
 
 @implementation SideMenuViewController
+@synthesize lblWecome;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    
+    NSUserDefaults *userLogin = [NSUserDefaults standardUserDefaults];
+    userData = [[NSMutableDictionary alloc] init];
+    userData = [userLogin objectForKey:@"userData"];
+    NSString *firstName = [userData objectForKey:@"strFirstName"];
+    NSString *lastName = [userData objectForKey:@"strLastName"];
+    
+    lblWecome.text = [NSString stringWithFormat:@"Welcome: %@ %@",firstName,lastName];
 }
 
 - (void)didReceiveMemoryWarning {

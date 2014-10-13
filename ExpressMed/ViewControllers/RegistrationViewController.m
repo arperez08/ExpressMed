@@ -7,11 +7,11 @@
 //
 
 #import "RegistrationViewController.h"
-//#import "TSPopoverController.h"
-//#import "TSActionSheet.h"
+#import "TSPopoverController.h"
+#import "TSActionSheet.h"
 #import "ASIHTTPRequest.h"
 #import "ASIFormDataRequest.h"
-//#import "Constants.h"
+#import "Constants.h"
 #import "LoginViewController.h"
 
 @interface RegistrationViewController ()
@@ -20,9 +20,10 @@
 
 @implementation RegistrationViewController
 @synthesize scrollView;
-@synthesize txtTINNum, txtSSN, txtMemberNum, txtLastName, txtFirstName,txtMiddle, txtDOB, txtEmail, txtUserName,txtPasswrod, txtRePassword;
-@synthesize btnTems,btnMember,btnProvider,txtSecQuestion,txtAnswer;
+@synthesize txtSSN, txtLastName, txtFirstName,txtMiddle, txtDOB, txtEmail, txtPasswrod, txtRePassword;
+@synthesize btnTems,txtSecQuestion,txtAnswer;
 @synthesize privacyChecked, termsChecked;
+@synthesize txtDLicense,txtTitle,txtUserName;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -57,10 +58,6 @@
 - (void)viewDidLoad{
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    
-    memberCheckbox = YES;
-    providerCheckbox = NO;
-    
     if (termsChecked == YES) {
         [btnTems setImage:[UIImage imageNamed:@"check.png"] forState:UIControlStateNormal];
         termsCheckbox = YES;
@@ -70,28 +67,27 @@
         termsCheckbox = NO;
     }
     
-    
     [self.navigationController setNavigationBarHidden:YES];
-    scrollView.contentSize = CGSizeMake(scrollView.frame.size.width, 1200);
+    scrollView.contentSize = CGSizeMake(scrollView.frame.size.width, 930);
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(dismissKeyboard)];
     [self.view addGestureRecognizer:tap];
 
     [btnBday addTarget:self action:@selector(showBDay:forEvent:) forControlEvents:UIControlEventTouchUpInside];
     [btnSecurity addTarget:self action:@selector(showSecQuestions:forEvent:) forControlEvents:UIControlEventTouchUpInside];
     
-    txtTINNum.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"TIN" attributes:@{NSForegroundColorAttributeName: [UIColor grayColor]}];
-    txtSSN.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"SSN" attributes:@{NSForegroundColorAttributeName: [UIColor grayColor]}];
-    txtMemberNum.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Member Number" attributes:@{NSForegroundColorAttributeName: [UIColor grayColor]}];
-    txtLastName.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Last Name" attributes:@{NSForegroundColorAttributeName: [UIColor grayColor]}];
-    txtFirstName.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"First Name" attributes:@{NSForegroundColorAttributeName: [UIColor grayColor]}];
-    txtMiddle.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Middle Name" attributes:@{NSForegroundColorAttributeName: [UIColor grayColor]}];
-    txtDOB.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Date of Birth" attributes:@{NSForegroundColorAttributeName: [UIColor grayColor]}];
-    txtEmail.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Email Address" attributes:@{NSForegroundColorAttributeName: [UIColor grayColor]}];
-    txtUserName.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"User Name" attributes:@{NSForegroundColorAttributeName: [UIColor grayColor]}];
-    txtPasswrod.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Password" attributes:@{NSForegroundColorAttributeName: [UIColor grayColor]}];
-    txtRePassword.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Re-Enter Password" attributes:@{NSForegroundColorAttributeName: [UIColor grayColor]}];
-    txtSecQuestion.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Select Question" attributes:@{NSForegroundColorAttributeName: [UIColor grayColor]}];
-    txtAnswer.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Answer" attributes:@{NSForegroundColorAttributeName: [UIColor grayColor]}];
+    txtSSN.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@" SSN" attributes:@{NSForegroundColorAttributeName: [UIColor lightGrayColor]}];
+    txtDLicense.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@" DL License" attributes:@{NSForegroundColorAttributeName: [UIColor lightGrayColor]}];
+    txtLastName.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@" Last Name" attributes:@{NSForegroundColorAttributeName: [UIColor lightGrayColor]}];
+    txtFirstName.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@" First Name" attributes:@{NSForegroundColorAttributeName: [UIColor lightGrayColor]}];
+    txtMiddle.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@" Middle Name" attributes:@{NSForegroundColorAttributeName: [UIColor lightGrayColor]}];
+    txtDOB.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@" Date of Birth" attributes:@{NSForegroundColorAttributeName: [UIColor lightGrayColor]}];
+    txtEmail.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@" Email Address" attributes:@{NSForegroundColorAttributeName: [UIColor lightGrayColor]}];
+    txtPasswrod.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@" Password" attributes:@{NSForegroundColorAttributeName: [UIColor lightGrayColor]}];
+    txtRePassword.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@" Re-Enter Password" attributes:@{NSForegroundColorAttributeName: [UIColor lightGrayColor]}];
+    txtSecQuestion.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@" Select Question" attributes:@{NSForegroundColorAttributeName: [UIColor lightGrayColor]}];
+    txtAnswer.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@" Answer" attributes:@{NSForegroundColorAttributeName: [UIColor lightGrayColor]}];
+    txtTitle.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@" Title" attributes:@{NSForegroundColorAttributeName: [UIColor lightGrayColor]}];
+    txtUserName.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@" Username" attributes:@{NSForegroundColorAttributeName: [UIColor lightGrayColor]}];
     
     arrayQuestions=[[NSMutableArray alloc]initWithObjects:
                     @"Select Question",
@@ -114,18 +110,18 @@
 }
 
 -(void)dismissKeyboard {
-    [txtTINNum resignFirstResponder];
     [txtSSN resignFirstResponder];
-    [txtMemberNum resignFirstResponder];
+    [txtDLicense resignFirstResponder];
     [txtLastName resignFirstResponder];
     [txtFirstName resignFirstResponder];
     [txtMiddle resignFirstResponder];
     [txtDOB resignFirstResponder];
     [txtEmail resignFirstResponder];
-    [txtUserName resignFirstResponder];
     [txtPasswrod resignFirstResponder];
     [txtRePassword resignFirstResponder];
     [txtAnswer resignFirstResponder];
+    [txtUserName resignFirstResponder];
+    [txtTitle resignFirstResponder];
 }
 
 -(void)textFieldDidEndEditing:(UITextField *)textField{
@@ -210,161 +206,103 @@
 }
 
 - (void) validateData{
-    if (memberCheckbox) {
-        if (([txtSSN.text isEqualToString:@""]) && ([txtMemberNum.text isEqualToString:@""])) {
-            [self alertStatus:@"SSN or Member number is required" :@"Error"];
+    if (([txtLastName.text isEqualToString:@""]) || ([txtFirstName.text isEqualToString:@""]) || ([txtDOB.text isEqualToString:@""]) || ([txtEmail.text isEqualToString:@""]) || ([txtUserName.text isEqualToString:@""]) || ([txtPasswrod.text isEqualToString:@""])) {
+
+        if ([txtUserName.text isEqualToString:@""]) {
+            [self alertStatus:@"Username is required." :@"Error"];
         }
-        else{
-            if (([txtLastName.text isEqualToString:@""]) || ([txtFirstName.text isEqualToString:@""]) || ([txtDOB.text isEqualToString:@""]) || ([txtEmail.text isEqualToString:@""]) || ([txtUserName.text isEqualToString:@""]) || ([txtPasswrod.text isEqualToString:@""])) {
-                
-                if ([txtLastName.text isEqualToString:@""]) {
-                    [self alertStatus:@"Last Name is required." :@"Error"];
-                }
-                else if ([txtFirstName.text isEqualToString:@""]) {
-                    [self alertStatus:@"First Name is required." :@"Error"];
-                }
-                else if ([txtDOB.text isEqualToString:@""]) {
-                    [self alertStatus:@"Date of Birth is required." :@"Error"];
-                }
-                else if ([txtEmail.text isEqualToString:@""]) {
-                    [self alertStatus:@"Email is required." :@"Error"];
-                }
-                else if ([txtUserName.text isEqualToString:@""]) {
-                    [self alertStatus:@"Username is required." :@"Error"];
-                }
-                else if ([txtPasswrod.text isEqualToString:@""]) {
-                    [self alertStatus:@"Password is required." :@"Error"];
-                }
-            }
-            else{
-                if ([self NSStringIsValidEmail:txtEmail.text]){
-                    if ([txtPasswrod.text isEqual:txtRePassword.text]) {
-                        
-                        if (!termsCheckbox) {
-                            [self alertStatus:@"Please accept terms and conditions" :@"Error"];
-                        }
-                        else{
-                            HUB = [[MBProgressHUD alloc]initWithView:self.view];
-                            [self.view addSubview:HUB];
-                            HUB.labelText = @"Retrieving and validating data…";
-                            [HUB showWhileExecuting:@selector(submitData) onTarget:self withObject:nil animated:YES];
-                        }
-                        
-                    }
-                    else{
-                        [self alertStatus:@"Password did not match" :@"Error"];
-                    }
-                }
-                else{
-                    [self alertStatus:@"Invalid email address" :@"Error"];
-                }
-            }
+        else if ([txtLastName.text isEqualToString:@""]) {
+            [self alertStatus:@"Last Name is required." :@"Error"];
+        }
+        else if ([txtFirstName.text isEqualToString:@""]) {
+            [self alertStatus:@"First Name is required." :@"Error"];
+        }
+        else if ([txtDOB.text isEqualToString:@""]) {
+            [self alertStatus:@"Date of Birth is required." :@"Error"];
+        }
+        else if ([txtEmail.text isEqualToString:@""]) {
+            [self alertStatus:@"Email is required." :@"Error"];
+        }
+        else if ([txtPasswrod.text isEqualToString:@""]) {
+            [self alertStatus:@"Password is required." :@"Error"];
         }
     }
     else{
-        if ([txtTINNum.text isEqualToString:@""]) {
-            [self alertStatus:@"TIN number is required" :@"Error"];
-        }
-        else{
-            if (([txtLastName.text isEqualToString:@""]) || ([txtFirstName.text isEqualToString:@""]) || ([txtDOB.text isEqualToString:@""]) || ([txtEmail.text isEqualToString:@""]) || ([txtUserName.text isEqualToString:@""]) || ([txtPasswrod.text isEqualToString:@""])|| ([txtSecQuestion.text isEqualToString:@""]) || ([txtAnswer.text isEqualToString:@""])) {
-                
-                if ([txtLastName.text isEqualToString:@""]) {
-                    [self alertStatus:@"Last Name is required." :@"Error"];
+        if ([self NSStringIsValidEmail:txtEmail.text]){
+            if ([txtPasswrod.text isEqual:txtRePassword.text]) {
+                if (!termsCheckbox) {
+                    [self alertStatus:@"Please accept terms and conditions" :@"Error"];
                 }
-                else if ([txtFirstName.text isEqualToString:@""]) {
-                    [self alertStatus:@"First Name is required." :@"Error"];
-                }
-                else if ([txtDOB.text isEqualToString:@""]) {
-                    [self alertStatus:@"Date of Birth is required." :@"Error"];
-                }
-                else if ([txtEmail.text isEqualToString:@""]) {
-                    [self alertStatus:@"Email is required." :@"Error"];
-                }
-                else if ([txtUserName.text isEqualToString:@""]) {
-                    [self alertStatus:@"Username is required." :@"Error"];
-                }
-                else if ([txtPasswrod.text isEqualToString:@""]) {
-                    [self alertStatus:@"Password is required." :@"Error"];
-                }
-                else if ([txtSecQuestion.text isEqualToString:@""]) {
-                    [self alertStatus:@"Please select security question." :@"Error"];
-                }
-                else if ([txtPasswrod.text isEqualToString:@""]) {
-                    [self alertStatus:@"Answer is required." :@"Error"];
+                else{
+                    HUB = [[MBProgressHUD alloc]initWithView:self.view];
+                   [self.view addSubview:HUB];
+                    HUB.labelText = @"Retrieving and validating data…";
+                    [HUB showWhileExecuting:@selector(submitData) onTarget:self withObject:nil animated:YES];
                 }
             }
             else{
-                if ([self NSStringIsValidEmail:txtEmail.text]){
-                    if ([txtPasswrod.text isEqual:txtRePassword.text]) {
-                        
-                        if (!termsCheckbox) {
-                            [self alertStatus:@"Please accept terms and conditions" :@"Error"];
-                        }
-                        else{
-                            HUB = [[MBProgressHUD alloc]initWithView:self.view];
-                            [self.view addSubview:HUB];
-                            HUB.labelText = @"Retrieving and validating data…";
-                            [HUB showWhileExecuting:@selector(submitData) onTarget:self withObject:nil animated:YES];
-                        }
-                        
-                    }
-                    else{
-                        [self alertStatus:@"Password did not match" :@"Error"];
-                    }
-                }
-                else{
-                    [self alertStatus:@"Invalid email address" :@"Error"];
-                }
+                [self alertStatus:@"Password did not match" :@"Error"];
             }
+        }
+        else{
+            [self alertStatus:@"Invalid email address" :@"Error"];
         }
     }
 }
 
 
 - (void) submitData {
-    NSString *strTinNum = @"";
-    int intIDType = 0;
-    if (!memberCheckbox){
-        intIDType = 1;
-        strTinNum = txtTINNum.text;
+    NSString * strPortalURL = [NSString stringWithFormat:PORTAL_URL,@"RegisterUser"];
+    NSLog(@"strURL: %@",strPortalURL);
+    ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:strPortalURL]];
+    [request setRequestMethod:@"POST"];
+    [request addRequestHeader:@"Accept" value:@"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"];
+    [request addRequestHeader:@"Content-Type" value:@"application/json; charset=utf-8"];
+    [request setPostValue:txtFirstName.text forKey:@"strFirstName"];
+    [request setPostValue:txtMiddle.text forKey:@"strMiddleName"];
+    [request setPostValue:txtLastName.text forKey:@"strLastName"];
+    [request setPostValue:txtDOB.text forKey:@"strDOB"];
+    [request setPostValue:txtEmail.text forKey:@"strEmailAdd"];
+    [request setPostValue:txtPasswrod.text forKey:@"strPassword"];
+    [request setPostValue:txtSecQuestion.text forKey:@"strSecQst"];
+    [request setPostValue:txtAnswer.text forKey:@"strSecAns"];
+    [request setPostValue:txtSSN.text forKey:@"strSSN"];
+    [request setPostValue:txtDLicense.text forKey:@"strDLicense"];
+    [request setPostValue:txtUserName.text forKey:@"strUserName"];
+    [request setPostValue:txtTitle.text forKey:@"strTitle"];
+    [request startSynchronous];
+    NSData *urlData = [request responseData];
+    NSError *error = [request error];
+    if (!error) {
+        NSString *responseData = [[NSString alloc]initWithData:urlData encoding:NSUTF8StringEncoding];
+        NSLog(@"responseData: %@",responseData);
+        NSMutableArray *arrayData = [NSJSONSerialization JSONObjectWithData:urlData options:NSJSONReadingMutableContainers error:nil];
+        NSMutableDictionary *dictData = [arrayData objectAtIndex:0];
+        NSString *strStatus = [NSString stringWithFormat:@"%@",[dictData objectForKey:@"strStatus"]];
+        if ([strStatus isEqualToString:@"Success"]) {
+            [self alertStatus:@"Registeration successfull, please check your registered email address for more information." :@"Success"];
+            if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+                LoginViewController *Lvc = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:[NSBundle mainBundle]];
+                [self.navigationController setNavigationBarHidden:YES];
+                [self.navigationController pushViewController:Lvc animated:YES];
+            }
+            else{
+                LoginViewController *Lvc = [[LoginViewController alloc] initWithNibName:@"LoginViewController_iPad" bundle:[NSBundle mainBundle]];
+                [self.navigationController setNavigationBarHidden:YES];
+                [self.navigationController pushViewController:Lvc animated:YES];
+            }
+        }
+        else{
+            [self alertStatus:strStatus :@"Error"];
+        }
     }
     else{
-        strTinNum = txtMemberNum.text;
+        [self alertStatus:[NSString stringWithFormat:@"%@",error] :@"Error"];
+        NSLog(@"error: %@",error);
     }
 }
 
-- (IBAction)btnMember:(id)sender {
-    if (!memberCheckbox) {
-        [btnMember setImage:[UIImage imageNamed:@"check.png"] forState:UIControlStateNormal];
-        memberCheckbox = YES;
-        [btnProvider setImage:nil forState:UIControlStateNormal];
-        providerCheckbox = NO;
-        txtTINNum.enabled = FALSE;
-        txtTINNum.alpha = 0.3;
-        txtTINNum.text = @"";
-        txtSSN.enabled = TRUE;
-        txtSSN.alpha = 1.0;
-        txtMemberNum.enabled = TRUE;
-        txtMemberNum.alpha = 1.0;
-    }
-}
 
-- (IBAction)btnProvider:(id)sender {
-    if (!providerCheckbox) {
-        [btnProvider setImage:[UIImage imageNamed:@"check.png"] forState:UIControlStateNormal];
-        providerCheckbox = YES;
-        [btnMember setImage:nil forState:UIControlStateNormal];
-        memberCheckbox = NO;
-        txtTINNum.enabled = TRUE;
-        txtTINNum.alpha = 1.0;
-        txtSSN.enabled = FALSE;
-        txtSSN.alpha = 0.3;
-        txtSSN.text = @"";
-        txtMemberNum.enabled = FALSE;
-        txtMemberNum.alpha = 0.3;
-        txtMemberNum.text = @"";
-    }
-}
 
 - (IBAction)btnTerms:(id)sender {
     if (!termsCheckbox) {
@@ -406,11 +344,11 @@
         //BdayPicker.date = [dateFormat dateFromString:@"Jan 01, 1970"];
         [BdayPicker addTarget:self action:@selector(updateTextField:) forControlEvents:UIControlEventValueChanged];
     }
-//    TSPopoverController *popoverController = [[TSPopoverController alloc] initWithContentViewController:bdayNameView];
-//    popoverController.cornerRadius = 10;
-//    popoverController.popoverBaseColor = [UIColor whiteColor];
-//    popoverController.popoverGradient= NO;
-//    [popoverController showPopoverWithTouch:event];
+    TSPopoverController *popoverController = [[TSPopoverController alloc] initWithContentViewController:bdayNameView];
+    popoverController.cornerRadius = 10;
+    popoverController.popoverBaseColor = [UIColor whiteColor];
+    popoverController.popoverGradient= NO;
+    [popoverController showPopoverWithTouch:event];
 }
 
 -(void)showSecQuestions:(id)sender forEvent:(UIEvent*)event{
@@ -423,11 +361,11 @@
     securityQuestion.delegate = self;
     securityQuestion.dataSource = self;
     [prodNameView.view addSubview:securityQuestion];
-//    TSPopoverController *popoverController = [[TSPopoverController alloc] initWithContentViewController:prodNameView];
-//    popoverController.cornerRadius = 0;
-//    popoverController.popoverBaseColor = [UIColor whiteColor];
-//    popoverController.popoverGradient= YES;
-//    [popoverController showPopoverWithTouch:event];
+    TSPopoverController *popoverController = [[TSPopoverController alloc] initWithContentViewController:prodNameView];
+    popoverController.cornerRadius = 0;
+    popoverController.popoverBaseColor = [UIColor whiteColor];
+    popoverController.popoverGradient= YES;
+    [popoverController showPopoverWithTouch:event];
 }
 
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)thePickerView {

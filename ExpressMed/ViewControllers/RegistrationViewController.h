@@ -20,8 +20,6 @@
     BOOL termsCheckbox;
     
     IBOutlet UIButton *btnTems;
-    IBOutlet UIButton *btnMember;
-    IBOutlet UIButton *btnProvider;
     
     UIDatePicker *BdayPicker;
     IBOutlet UIButton *btnBday;
@@ -34,8 +32,6 @@
     BOOL termsChecked;
 }
 - (IBAction)btnBack:(id)sender;
-- (IBAction)btnMember:(id)sender;
-- (IBAction)btnProvider:(id)sender;
 - (IBAction)btnTerms:(id)sender;
 - (IBAction)btnSubmit:(id)sender;
 
@@ -46,19 +42,19 @@
 @property (strong, nonatomic) IBOutlet UITextField *txtSecQuestion;
 @property (strong, nonatomic) IBOutlet UITextField *txtAnswer;
 
-@property (nonatomic, retain) IBOutlet UIScrollView * scrollView;
-@property (strong, nonatomic) IBOutlet UITextField *txtTINNum;
+@property (nonatomic, retain) IBOutlet UIScrollView *scrollView;
 @property (strong, nonatomic) IBOutlet UITextField *txtSSN;
-@property (strong, nonatomic) IBOutlet UITextField *txtMemberNum;
 @property (strong, nonatomic) IBOutlet UITextField *txtLastName;
 @property (strong, nonatomic) IBOutlet UITextField *txtFirstName;
 @property (strong, nonatomic) IBOutlet UITextField *txtMiddle;
 @property (strong, nonatomic) IBOutlet UITextField *txtDOB;
 @property (strong, nonatomic) IBOutlet UITextField *txtEmail;
-@property (strong, nonatomic) IBOutlet UITextField *txtUserName;
 @property (strong, nonatomic) IBOutlet UITextField *txtPasswrod;
 @property (strong, nonatomic) IBOutlet UITextField *txtRePassword;
+
+@property (strong, nonatomic) IBOutlet UITextField *txtUserName;
+@property (strong, nonatomic) IBOutlet UITextField *txtTitle;
+@property (strong, nonatomic) IBOutlet UITextField *txtDLicense;
+
 @property (strong, nonatomic) IBOutlet UIButton *btnTems;
-@property (strong, nonatomic) IBOutlet UIButton *btnMember;
-@property (strong, nonatomic) IBOutlet UIButton *btnProvider;
 @end

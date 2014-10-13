@@ -7,6 +7,8 @@
  *
  */
 
+
+#import <UIKit/UIKit.h>
 @interface UIBarButtonItem(WEPopover)
 
 - (CGRect)frameInView:(UIView *)v;
